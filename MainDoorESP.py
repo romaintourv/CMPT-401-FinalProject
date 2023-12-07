@@ -41,50 +41,54 @@ currentHour = currentTime[3]
 
 print("Current Time:", "{:02d}".format(currentHour))
 
-# oke boolean detect person code:
-if personPasses:
-# if detects:
-    # run romains keypad code
-    startTime = time.time()
+while True:
 
-    while True:
-        keydata=key()
-        if keydata!=None:
-            keyIn[keyInNum]=keydata
-            keyInNum=keyInNum+1
+
+
+    # oke boolean detect person code:
+    if personPasses:
+    # if detects:
+        # run romains keypad code
+        startTime = time.time()
+
+        while True:
+            keydata=key()
+            if keydata!=None:
+                keyIn[keyInNum]=keydata
+                keyInNum=keyInNum+1
+                
+            if keyInNum==4:
+                if keyIn==keyOut:
+                    print("passWord right!")
+                    # wait a couple seconds then start checking for person passing by
+                    # reset pass key in
+                    keyIn=['','','','']
+                    break
+
+                else:
+                    print("passWord error!")
+                    # have retry logic send message via bluetooth
+                    tries = tries + 1
+                    # reset pass key in
+                    keyIn=['','','','']
+                    # restart timer for homeowner if they get it wrong
+                    startTime = time.time()
+                    
+                    if tries >= 3:
+                        print("Someone is trying to leave the house")
+                        #notify the homeowner but don't stop tries
+                    
+                keyInNum=0
             
-        if keyInNum==4:
-            if keyIn==keyOut:
-                print("passWord right!")
-                # wait a couple seconds then start checking for person passing by
-                # reset pass key in
-                keyIn=['','','','']
-                break
+            currentTime = time.time()
+            
+            # checking not too much time has been spent since sonor was triggered
+            if (currentTime - startTime) >= 10:
+                print("Someone has left the house")
+                #notify homeowner that someone 
+                onTheLoose = True
 
-            else:
-                print("passWord error!")
-                # have retry logic send message via bluetooth
-                tries = tries + 1
-                # reset pass key in
-                keyIn=['','','','']
-                # restart timer for homeowner if they get it wrong
-                startTime = time.time()
-                
-                if tries >= 3:
-                    print("Someone is trying to leave the house")
-                    #notify the homeowner but don't stop tries
-                
-            keyInNum=0
+    if onTheLoose:
+        # send message to homeowner
+        startTimer = time.time()
         
-        currentTime = time.time()
-        
-        # checking not too much time has been spent since sonor was triggered
-        if (currentTime - startTime) >= 10:
-            print("Someone has left the house")
-            #notify homeowner that someone 
-            onTheLoose = True
-
-if onTheLoose:
-    # send message to homeowner
-    startTimer = time.time()
-    
