@@ -15,7 +15,9 @@ def key():
         return keyvalue
     
 # boolean to see if someone has escaped
+sentryMode = True
 onTheLoose = False
+personPasses = False
 
 #define pins for keypad
 keyPad=KeyPad(14,27,26,25,13,21,22,23)
@@ -42,6 +44,11 @@ currentHour = currentTime[3]
 print("Current Time:", "{:02d}".format(currentHour))
 
 while True:
+    if sentryMode:
+        #detect distance
+        # someone is there:
+            #set person passes to true
+            #set setnry mode to false
 
 
 
@@ -91,4 +98,7 @@ while True:
     if onTheLoose:
         # send message to homeowner
         startTimer = time.time()
+        # ESP recieves a message a message that patient has been found:
+            # onTheLoose = False
+            # sentry mode = True
         
